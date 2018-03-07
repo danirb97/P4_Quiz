@@ -138,37 +138,39 @@ exports.playCmd = rl => {
 
     let score = 0;
 
-    let toBeResolved = [
+    let toBeResolved = [];
 
-    ];
-    for (let i = 0; i<toBeResolved.length; i++) {
-
+    for (let i = 0; i < model.count(); i++) {
+        toBeResolved[i] = i;
     }
 
     const playOne = () => {
-
-        try {
-            if (!(toBeResolved.length > 0)) {
-                log('No hay nada más que preguntar.');
-                log(`Fin del juego. Aciertos: ${score}`);
-                biglog(score, 'purple');
-                rl.prompt();
-            } else {
-                let id = toBeResolved[Math.random() * toBeResolved.length];
-                let quiz = model.getByIndex(id);
-                rl.question(quiz.question, answer => {
+        if (toBeResolved.length === 0) {
+            log('No hay nada más que preguntar.');
+            //log(`Fin del juego. Aciertos: ${score}`);
+            biglog(`${score}`, 'magenta');
+            rl.prompt();
+        } else {
+            try {
+                let id = Math.floor(Math.random() * toBeResolved.length);
+                let quiz = model.getByIndex(toBeResolved[id]);
+                rl.question(colorize(`${quiz.question}: `, 'red'), answer => {
                     if (answer.trim() === quiz.answer) {
                         score++;
+                        toBeResolved.splice(id, 1);
                         log(`CORRECTO - Lleva ${score} aciertos.`);
+                        playOne();
                     } else {
                         log(`INCORRECTO.`);
                         log(`Fin del juego. Aciertos: ${score}`);
+                        biglog(`${score}`, 'magenta');
+                        rl.prompt();
                     }
                 });
+            } catch (error) {
+                errorlog(error.message);
+                rl.prompt();
             }
-        } catch (error) {
-            errorlog(error.message);
-            rl.prompt();
         }
     };
 

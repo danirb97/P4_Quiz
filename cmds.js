@@ -244,7 +244,7 @@ exports.editCmd = (rl, id) => {
  * @param rl Objeto readLine usado para implementar el CLI.
  */
 exports.creditsCmd = rl => {
-    log('Autores de la práctica:');
-    log('Nombre 1', 'green');
+    log('Autor de la práctica:');
+    log('DANIEL', 'green');
     rl.prompt();
 };

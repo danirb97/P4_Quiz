@@ -207,7 +207,7 @@ exports.testCmd = (rl, id) => {
  *
  * @param rl Objeto readLine usado para implementar el CLI.
  */
-exports.playCmd = rl => {
+//exports.playCmd = rl => {
 
     /*let score = 0;
 
@@ -249,16 +249,9 @@ exports.playCmd = rl => {
 
     playOne();*/
 
-    let score = 0;
-
-    let toBeResolved = [];
-
-    for (let i = 0; i < model.count(); i++) {
-        toBeResolved[i] = i;
-    }
 
     
-};
+//};
 
 
 /**

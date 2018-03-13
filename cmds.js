@@ -209,46 +209,52 @@ exports.testCmd = (rl, id) => {
  */
 exports.playCmd = rl => {
 
-    /*let score = 0;
+    let score = 0;
 
     let toBeResolved = [];
 
-    for (let i = 0; i < model.count(); i++) {
-        toBeResolved[i] = i;
-    }
-
     const playOne = () => {
-        if (toBeResolved.length === 0) {
-            log('No hay nada más que preguntar.');
-            //log(`Fin del juego. Aciertos: ${score}`);
-            biglog(`${score}`, 'magenta');
-            rl.prompt();
-        } else {
-            try {
-                let id = Math.floor(Math.random() * toBeResolved.length);
-                let quiz = model.getByIndex(toBeResolved[id]);
-                rl.question(colorize(`${quiz.question}: `, 'red'), answer => {
-                    if (answer.trim() === quiz.answer) {
-                        score++;
-                        toBeResolved.splice(id, 1);
-                        log(`CORRECTO - Lleva ${score} aciertos.`);
-                        playOne();
-                    } else {
-                        log(`INCORRECTO.`);
-                        log(`Fin del juego. Aciertos: ${score}`);
-                        biglog(`${score}`, 'magenta');
-                        rl.prompt();
-                    }
-                });
-            } catch (error) {
-                errorlog(error.message);
-                rl.prompt();
-            }
-        }
-    };
 
-    playOne();*/
-    return 0;
+        return Promise.resolve()
+            .then(() => {
+
+                if (toBeResolved.length <= 0) {
+                    log("No hay nada más que preguntar. ");
+                    log(`Fin del juego. Aciertos: ${score}`);
+                    biglog(`${score}`, "magenta");
+                    rl.prompt();
+                    return;
+                }
+
+                let id = Math.floor(Math.random() * toBeResolved.length);
+                let quiz = toBeResolved[id];
+                toBeResolved.splice(id, 1);
+
+                makeQuestion(rl, `${quiz.question}: `)
+                    .then(answer => {
+                        if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
+                            score++;
+                            log(`CORRECTO - Lleva ${score} aciertos`);
+                            return playOne();
+                        } else {
+                            log("INCORRECTO");
+                            log(`Fin del juego. Aciertos: ${score}`);
+                            biglog(`${score}`, "magenta");
+                            rl.prompt();
+                        }
+                    })
+            })
+    };
+    models.quiz.findAll({raw: true})
+        .then(quizzes => {
+            toBeResolved = quizzes;
+        })
+        .then(() => {
+            return playOne();
+        })
+        .catch(e => {
+            console.log("Error: "+ e);
+        })
 };
 
 

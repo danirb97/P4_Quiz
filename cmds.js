@@ -235,7 +235,7 @@ exports.playCmd = rl => {
                         if (answer.trim().toLowerCase() === quiz.answer.trim().toLowerCase()) {
                             score++;
                             log(`CORRECTO - Lleva ${score} aciertos`);
-                            return playOne();
+                            playOne();
                         } else {
                             log("INCORRECTO");
                             log(`Fin del juego. Aciertos: ${score}`);
@@ -250,7 +250,7 @@ exports.playCmd = rl => {
             toBeResolved = quizzes;
         })
         .then(() => {
-            return playOne();
+            playOne();
         })
         .catch(e => {
             console.log("Error: "+ e);
